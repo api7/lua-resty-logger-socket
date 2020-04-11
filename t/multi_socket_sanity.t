@@ -199,7 +199,7 @@ not initialized
         }
     }
 
-    location /main {
+    location = /main {
         content_by_lua_block {
             local logger_socket = require "resty.logger.socket"
             local logger = logger_socket:new()
@@ -222,4 +222,92 @@ GET /t
 done
 --- no_error_log
 [error]
+
+=== TEST 7: bad user config
+--- http_config eval
+"$::HttpConfig"
+. q{
+    server {
+        listen 29999;
+    }
+}
+--- config
+    location = /t {
+        content_by_lua_block {
+            local logger_socket = require "resty.logger.socket"
+            local logger = logger_socket:new()
+            local ok, err = logger.init("hello")
+            if not ok then
+                ngx.say(err)
+            end
+
+        }
+    }
+--- request
+GET /t
+--- response_body
+user_config must be a table
+--- no_error_log
+[error]
+
+=== TEST 8: bad user config: no host/port or path
+--- http_config eval
+"$::HttpConfig"
+. q{
+    server {
+        listen 29999;
+    }
+}
+--- config
+    location = /t {
+          content_by_lua_block {
+            collectgarbage()  -- to help leak testing
+            local logger_socket = require "resty.logger.socket"
+            local logger = logger_socket:new()
+            local ok, err = logger:init{
+                flush_limit = 1,
+                drop_limit = 2,
+                retry_interval = 1,
+                timeout = 100,
+            }
+            if not ok then
+                ngx.say(err)
+            end
+        }
+    }
+--- request
+GET /t
+--- response_body
+no logging server configured. "host"/"port" or "path" is required.
+--- no_error_log
+[error]
+
+=== TEST 9: bad user config: flush_limit > drop_limit
+--- http_config eval
+"$::HttpConfig"
+. q{
+    server {
+        listen 29999;
+    }
+}
+--- config
+    location = /t {
+          content_by_lua_block {
+            collectgarbage()  -- to help leak testing
+            local logger_socket = require "resty.logger.socket"
+            local logger = logger_socket:new()
+            local ok, err = logger:init{
+                flush_limit = 2,
+                drop_limit = 1,
+                path = "$TEST_NGINX_HTML_DIR/logger_test.sock",
+            }
+            if not ok then
+                ngx.say(err)
+            end
+        }
+    }
+--- request
+GET /t
+--- response_body
+"flush_limit" should be < "drop_limit"
 
