@@ -335,7 +335,7 @@ local function _write_buffer(self, msg, len)
     return self.buffer_size
 end
 
-function _mt.new(_)
+function _mt.new(self, user_config)
 
     -- user config
     local conf = {
@@ -378,8 +378,16 @@ function _mt.new(_)
         ssl_session           = nil
     }
 
-    return setmetatable(conf, _mt)
+    local logger = setmetatable(conf, _mt)
 
+    if user_config then
+        local ok, err = logger:init(user_config)
+        if not ok then
+            return nil, err
+        end
+    end
+
+    return logger
 end
 
 
