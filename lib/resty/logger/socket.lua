@@ -387,6 +387,8 @@ function _mt.new(self, user_config)
         end
     end
 
+    logger_socket = logger
+
     return logger
 end
 
