@@ -25,6 +25,7 @@ log_level('debug');
 run_tests();
 
 __DATA__
+
 === TEST 1: small flush_limit, instant flush, unix domain socket
 --- http_config eval
 "$::HttpConfig"
@@ -63,6 +64,8 @@ done
 --- no_error_log
 [error]
 
+
+
 === TEST 2: small flush_limit, instant flush, unix domain socket
 --- http_config eval: $::HttpConfig
 --- config
@@ -95,6 +98,8 @@ GET /t?a=1&b=2
 done
 --- no_error_log
 [error]
+
+
 
 === TEST 3: small flush_limit, instant flush, write a number to remote
 --- http_config eval
@@ -133,6 +138,8 @@ done
 --- no_error_log
 [error]
 
+
+
 === TEST 4: buffer log messages, no flush
 --- http_config eval
 "$::HttpConfig"
@@ -170,6 +177,8 @@ done
 --- no_error_log
 [error]
 
+
+
 === TEST 5: not initted()
 --- http_config eval
 "$::HttpConfig"
@@ -194,6 +203,8 @@ GET /t
 not initialized
 --- no_error_log
 [error]
+
+
 
 === TEST 6: log subrequests
 --- http_config eval
@@ -244,6 +255,8 @@ done
 --- no_error_log
 [error]
 
+
+
 === TEST 7: bad user config
 --- http_config eval
 "$::HttpConfig"
@@ -270,6 +283,8 @@ GET /t
 user_config must be a table
 --- no_error_log
 [error]
+
+
 
 === TEST 8: bad user config: no host/port or path
 --- http_config eval
@@ -303,6 +318,8 @@ no logging server configured. "host"/"port" or "path" is required.
 --- no_error_log
 [error]
 
+
+
 === TEST 9: bad user config: flush_limit > drop_limit
 --- http_config eval
 "$::HttpConfig"
@@ -330,6 +347,8 @@ no logging server configured. "host"/"port" or "path" is required.
 GET /t
 --- response_body
 "flush_limit" should be < "drop_limit"
+
+
 
 === TEST 10: logger response
 --- http_config eval
@@ -416,6 +435,7 @@ foo
 wrote bytes: 10
 
 
+
 === TEST 12: flush periodically
 --- http_config eval
 "$::HttpConfig"
@@ -464,6 +484,7 @@ GET /t
 foo
 wrote bytes: 3
 wrote bytes: 3
+
 
 
 === TEST 13: SSL logging
@@ -628,6 +649,8 @@ wrote bytes: 77
 --- error_log
 Message received: Hello SSL
 SNI Host: nil
+
+
 
 === TEST 16: Test arguments
 --- http_config eval: $::HttpConfig
