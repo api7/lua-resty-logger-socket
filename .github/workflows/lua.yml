@@ -10,7 +10,7 @@ jobs:
 
   build:
     name: Install
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     env:
       JOBS: 1
       OPENRESTY_PREFIX: /usr/local/openresty
