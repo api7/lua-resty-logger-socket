@@ -279,7 +279,6 @@ local function _flush(premature, self)
                         .. "failed after " .. self.max_retry_times .. " retries: "
                         .. err
         _write_error(self, err_msg)
-        return nil, err_msg
     else
         if debug then
             ngx_log(DEBUG, "send " .. bytes .. " bytes")
