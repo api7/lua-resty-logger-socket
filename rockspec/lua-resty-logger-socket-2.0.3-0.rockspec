@@ -1,8 +1,8 @@
 package = "lua-resty-logger-socket"
-version = "2.0.2-0"
+version = "2.0.3-0"
 source = {
    url = "git://github.com/api7/lua-resty-logger-socket",
-   tag = "v2.0.2",
+   tag = "v2.0.3",
 }
 
 description = {
